@@ -1,5 +1,5 @@
 # Someone else's device Web Debug Assistant
-*Don't know what's wrong in your someone else's device? This assistant will tell you*
+*Don't know what's wrong in someone else's device? This assistant will tell you*
 
 Have you ever experienced this? Your users tell you that your web app doesn't work on their browsers, but the app works perfectly with your devices (usually works on your teammates' devices too), you have a gut feeling that the issue relates to a specific OS version of browser version of the users, all you need is to find a device that can reproduce the same case, but there are always some occasion that you cannot read the console and see what the error is
 

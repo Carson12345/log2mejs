@@ -125,7 +125,7 @@ var Log2MeJS = function (config) {
                         ... raw,
                         debugId: l2mDebugId
                     });
-                    log2UI(raw.message);
+                    // log2UI(raw.message);
                 }
             }
 

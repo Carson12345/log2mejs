@@ -1,2 +1,1 @@
-// THIS IS A CLIENT SIDE LIB
-console.log("THIS IS A CLIENT SIDE LIBRARY")
+export * from "./src/log2me_spa";

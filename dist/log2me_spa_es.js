@@ -1,11 +1,9 @@
-
-const l2mUrlParams = new URLSearchParams(window.location.search);
-
-const l2mDebugId = window.l2m_dbg_id || l2mUrlParams.get('l2m_dbg_id');
-const l2mReceiveMode = window.l2m_receive_mode || l2mUrlParams.get('l2m_receive_mode') || 'ui';
-const l2mPID = window.l2m_web_rtc_pid || l2mUrlParams.get('l2m_web_rtc_pid');
-
 var Log2MeJS = function (config) {
+    const l2mUrlParams = new URLSearchParams(window.location.search);
+    const l2mDebugId = window.l2m_dbg_id || l2mUrlParams.get('l2m_dbg_id');
+    const l2mReceiveMode = window.l2m_receive_mode || l2mUrlParams.get('l2m_receive_mode') || 'ui';
+    const l2mPID = window.l2m_web_rtc_pid || l2mUrlParams.get('l2m_web_rtc_pid');
+
     function loadDynamicScript(url, callback){
         let lId = 'l2m-peer-js';
         const existingScript = document.getElementById(lId);
@@ -23,8 +21,7 @@ var Log2MeJS = function (config) {
         if (existingScript) {
             callback();
         }
-    };
-
+    }
     // Simple: Make the DIV element draggable:
     // Reference https://www.w3schools.com/howto/howto_js_draggable.asp
     function dragElement(elmnt) {
@@ -74,7 +71,7 @@ var Log2MeJS = function (config) {
             // assign box new coordinates based on the touch.
             elmnt.style.left = touchLocation.clientX + 'px';
             elmnt.style.top = touchLocation.clientY + 'px';
-        })
+        });
 
         /* record the position of the touch
         when released using touchend event.
@@ -82,9 +79,9 @@ var Log2MeJS = function (config) {
 
         elmnt.addEventListener('touchend', function (e) {
             // current box position.
-            const x = parseInt(elmnt.style.left);
-            const y = parseInt(elmnt.style.top);
-        })
+            parseInt(elmnt.style.left);
+            parseInt(elmnt.style.top);
+        });
     }
 
     let log2UI = function (message) {
@@ -96,13 +93,20 @@ var Log2MeJS = function (config) {
         };
         logger.innerHTML += wrapMsg(message);
         console._original_console_log_func(message);
-    }
+    };
 
     return {
+        getConfig: function() {
+            return {
+                l2mDebugId,
+                l2mPID,
+                l2mReceiveMode
+            }
+        },
         loadPeerJS: function(callback) {
             loadDynamicScript('https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js', function(){
                 callback();
-            })
+            });
         },
         init: function (initConfig) {
             let processLog = function(message) {
@@ -127,7 +131,7 @@ var Log2MeJS = function (config) {
                     });
                     // log2UI(raw.message);
                 }
-            }
+            };
 
             // ui init
             if (l2mReceiveMode === 'ui') {
@@ -142,8 +146,8 @@ var Log2MeJS = function (config) {
             // function init
             const old = console.log;
             console._original_console_log_func = old;
-            console.log = processLog
-            console.error = console.debug = console.info = console.log
+            console.log = processLog;
+            console.error = console.debug = console.info = console.log;
             window.addEventListener('error', function (event) {
                 processLog({
                     message: event.error.message,
@@ -153,33 +157,34 @@ var Log2MeJS = function (config) {
             console.log("Log2Me Instance Connected");
         }
     }
-}
+};
 
-// Only run if in debug mode
-if (l2mDebugId) {
+const init = () => {
     try {
         window.addEventListener('DOMContentLoaded', function () {
-            let l2m = Log2MeJS();
-            if (l2mReceiveMode === 'web_rtc' && l2mPID) {
-                l2m.loadPeerJS(function(){
-                    console.log(l2mPID);
+            const l2m = Log2MeJS();
+            const l2mConfig = l2m.getConfig();
+            if (l2mConfig.l2mReceiveMode === 'web_rtc' && l2mConfig.l2mPID) {
+                l2m.loadPeerJS(function () {
                     var peer = new Peer();
-                    peer.on('open', function(id) {
+                    peer.on('open', function (id) {
                         console.log('My peer ID is: ' + id);
-                        const conn = peer.connect(l2mPID);
-                        conn.on('open', function() {
+                        const conn = peer.connect(l2mConfig.l2mPID);
+                        conn.on('open', function () {
                             console.log("Started Connection ...");
                             l2m.init({
                                 rtcConn: conn
                             });
                         });
                     });
-                })
+                });
             } else {
                 l2m.init();
             }
-        });   
+        });
     } catch (error) {
         console.log("Unable to init Log2MeJS");
     }
-}
+};
+
+export { init };

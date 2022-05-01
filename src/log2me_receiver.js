@@ -21,7 +21,7 @@ var l2mReceiver = new Peer();
         console.log('My peer ID is: ' + id);
         document.getElementById('peer-id').innerHTML = id;
 
-        document.getElementById('code-to-paste').innerText = `<script src="https://unpkg.com/log2mejs@latest/dist/log2me.js"></script>`;
+        document.getElementById('code-to-paste').innerText = `<script src="https://unpkg.com/log2mejs@latest/dist/log2me_cdn.js"></script>`;
 
         document.getElementById('url-to-go').innerText = `<your-original-url>?l2m_dbg_id=L2M&l2m_receive_mode=web_rtc&l2m_web_rtc_pid=${id}`;
 

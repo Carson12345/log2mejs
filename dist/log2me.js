@@ -106,9 +106,12 @@ var Log2MeJS = function (config) {
         },
         init: function (initConfig) {
             let processLog = function(message) {
-                let raw = typeof message == 'object' ? JSON.stringify(message) : message;
+                let raw = typeof message == 'object' ? message : {
+                    message,
+                    stack: ""
+                };
                 if (l2mReceiveMode === 'ui') {
-                    log2UI(raw);
+                    log2UI(raw.message);
                 }
                 if (l2mReceiveMode === 'web_rtc') {
                     // Receive messages
@@ -119,10 +122,10 @@ var Log2MeJS = function (config) {
                     initConfig.rtcConn.send({
                         url: window.location.href,
                         date: new Date().toISOString(),
-                        message: raw,
+                        ... raw,
                         debugId: l2mDebugId
                     });
-                    log2UI(raw);
+                    log2UI(raw.message);
                 }
             };
 

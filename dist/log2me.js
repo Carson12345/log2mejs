@@ -148,7 +148,7 @@ var Log2MeJS = function (config) {
                     stack: event.error.stack
                 });
             });
-            console.log("Logging function overrided");
+            console.log("Log2Me Instance Connected");
         }
     }
 };

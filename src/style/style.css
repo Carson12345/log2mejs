@@ -1,0 +1,35 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.text-normal {
+    font-size: 1rem;
+}
+
+.text-xs {
+    font-size: 0.65rem;
+}
+
+.text-sm {
+    font-size: 0.8rem;
+}
+
+.text-md {
+    font-size: 1.2rem;
+}
+
+.text-lg {
+    font-size: 1.5rem;
+}
+
+.w-pre-wrap {
+    white-space: pre-wrap;
+}
+
+.word-break-all {
+    word-break: break-all;
+}
+
+.header-content {
+    max-width: 800px;
+}

@@ -4,17 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exampel Receiver</title>
+    <title>Log2Me JS</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script id="l2m-peer-js" src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
-    <script src="../log2me_receiver.js"></script>
+    <script src="/src/log2me_receiver.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/src/style/style.css" crossorigin="anonymous">
 </head>
 <body>
-    <div>
-        <h1>Example Receiver</h1>
-        <h1>PeerID: <span id="peer-id"></span></h1>
-        <div id="l2m-received-container" style="padding:10px; border: 1px solid #DDD;">
+    <header class="page-header p-4 border-bottom d-flex" role="banner">
+        <div class="header-content mx-auto">
+            <h1 class="project-name text-center">Log2Me JS</h1>
+            <h2 class="project-tagline text-center text-md">Something wrong only at certain devices but you can't read the console of the devices? You can now directly see the error log of any device, without enabling developer mode of the device</h2>
+            <div class="text-center pt-4">
+                <a href="https://github.com/Carson12345/log2mejs" target="_blank" class="btn btn-outline-dark">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 p-4">
+                <div>
+                    <h2 class="text-md font-weight-bold">1. Getting Started</h2>
+                    <h5 class="text-normal font-weight-semibold mb-2">Paster the following code to the head element of the website page you want to debug / monitor log</h5>
+                    <div class="mt-2 border rounded p-4 mb-4">
+                        <code class="" id="code-to-paste">
+                        </code>
+                    </div>
 
+                    <h2 class="text-md font-weight-bold">2. If you want to read the log at your device</h2>
+                    <h5 class="text-normal font-weight-semibold mb-2">Let the tester go to your specific URL this way</h5>
+                    <div class="mt-2 border rounded p-4 mb-4">
+                        <code class="" id="url-to-go">
+                        </code>
+                    </div>
+
+                    <h2 class="text-md font-weight-bold">3. If you want to read the log at the tester's device screen</h2>
+                    <h5 class="text-normal font-weight-semibold mb-2">Let the tester go to your specific URL this way</h5>
+                    <div class="mt-2 border rounded p-4">
+                        <code class="" id="url-to-go-ui">
+                        </code>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 p-4">
+                <h1 class="text-md font-weight-bold">Example Receiver</h1>
+                <h2 class="text-normal">Peer ID: <span class="font-weight-bold" id="peer-id"></span></h2>
+                <h2 class="text-normal word-break-all mb-4">Peer URL: <span class="font-weight-bold" id="peer-url"></span></h2>
+                <div id="l2m-received-container" style="padding:10px; border: 1px solid #DDD;">
+                    <h5 class="text-sm m-auto text-center py-2">Log will be displayed here</h5>
+                </div>
+            </div>
         </div>
     </div>
     <script>

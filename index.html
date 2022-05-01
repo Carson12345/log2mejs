@@ -36,7 +36,20 @@
                     <h2 class="text-md font-weight-bold">Getting Started</h2>
                     <h5 class="text-normal font-weight-semibold mb-2">Paster the following code to the head element of the website page you want to debug / monitor log</h5>
                     <div class="mt-2 border rounded p-4 mb-4">
+                        <h5 class="font-weight-bold text-sm">CDN</h5>
                         <code class="" id="code-to-paste">
+                        </code>
+
+                        <h5 class="font-weight-bold text-sm mt-3">npm (use for React / Vue / Angular)</h5>
+                        <p class="text-sm">call "init()" in index.js or your app or other location, init should happen as early as possible in your application's lifecycle.</p>
+                        <code class="">
+                            npm i log2mejs
+                            <br>                     
+                            ...
+                            <br>
+                            import Log2Me from 'log2mejs';
+                            <br>
+                            Log2Me.init();
                         </code>
                     </div>
 

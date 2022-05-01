@@ -1,6 +1,7 @@
 {
   "name": "log2mejs",
-  "version": "1.0.12",
+  "type": "module",
+  "version": "1.0.17",
   "description": "*Don't know what's wrong in someone else's device? This assistant will tell you*",
   "main": "index.js",
   "scripts": {

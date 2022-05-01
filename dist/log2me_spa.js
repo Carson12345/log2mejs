@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var Log2MeJS = function (config) {
     const l2mUrlParams = new URLSearchParams(window.location.search);
     const l2mDebugId = window.l2m_dbg_id || l2mUrlParams.get('l2m_dbg_id');
@@ -163,32 +161,34 @@ var Log2MeJS = function (config) {
     }
 };
 
-const init = () => {
-    try {
-        window.addEventListener('DOMContentLoaded', function () {
-            const l2m = Log2MeJS();
-            const l2mConfig = l2m.getConfig();
-            if (l2mConfig.l2mReceiveMode === 'web_rtc' && l2mConfig.l2mPID) {
-                l2m.loadPeerJS(function () {
-                    var peer = new Peer();
-                    peer.on('open', function (id) {
-                        console.log('My peer ID is: ' + id);
-                        const conn = peer.connect(l2mConfig.l2mPID);
-                        conn.on('open', function () {
-                            console.log("Started Connection ...");
-                            l2m.init({
-                                rtcConn: conn
+var log2me_spa = {
+    init: () => {
+        try {
+            window.addEventListener('DOMContentLoaded', function () {
+                const l2m = Log2MeJS();
+                const l2mConfig = l2m.getConfig();
+                if (l2mConfig.l2mReceiveMode === 'web_rtc' && l2mConfig.l2mPID) {
+                    l2m.loadPeerJS(function () {
+                        var peer = new Peer();
+                        peer.on('open', function (id) {
+                            console.log('My peer ID is: ' + id);
+                            const conn = peer.connect(l2mConfig.l2mPID);
+                            conn.on('open', function () {
+                                console.log("Started Connection ...");
+                                l2m.init({
+                                    rtcConn: conn
+                                });
                             });
                         });
                     });
-                });
-            } else {
-                l2m.init();
-            }
-        });
-    } catch (error) {
-        console.log("Unable to init Log2MeJS");
+                } else {
+                    l2m.init();
+                }
+            });
+        } catch (error) {
+            console.log("Unable to init Log2MeJS");
+        }
     }
 };
 
-exports.init = init;
+module.exports = log2me_spa;

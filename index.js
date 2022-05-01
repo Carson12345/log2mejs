@@ -1,1 +1,3 @@
-export * from "./src/log2me_spa";
+import Log2MeJS from "./src/log2me_spa.js";
+
+export default Log2MeJS;

@@ -1,4 +1,4 @@
-import Log2MeJS from "./log2me_sender";
+import Log2MeJS from "./log2me_sender.js";
 
 export default {
     init: () => {
@@ -20,7 +20,8 @@ export default {
                             });
                         });
                     })
-                } else {
+                }
+                if (l2mConfig.l2mReceiveMode === 'ui') {
                     l2m.init();
                 }
             });

@@ -19,6 +19,8 @@ var l2mReceiver = new Peer();
                     if (data.url) {
                         document.getElementById('peer-url').innerText = data.url;
                     }
+                    delete data.url;
+                    delete data.debugId;
                     document.getElementById('l2m-received-container').innerHTML += '<code class="text-sm w-pre-wrap d-block mb-2 border-bottom p-2">' + JSON.stringify(data,undefined, 2) + '</code>';
                 });
             });

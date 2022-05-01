@@ -19,6 +19,9 @@
 <body>
     <header class="page-header p-4 border-bottom d-flex" role="banner">
         <div class="header-content mx-auto">
+            <div class="text-center pb-3">
+                <img height="50" width="50" src="https://unpkg.com/log2mejs@latest/android-chrome-512x512.png"/>
+            </div>
             <h1 class="project-name text-center">Log2Me JS</h1>
             <h2 class="project-tagline text-center text-md">Something wrong only at certain devices but you can't read the console of the devices? You can now directly see the error log of any device, without enabling developer mode of the device</h2>
             <div class="text-center pt-4">
@@ -53,9 +56,10 @@
                 </div>
             </div>
             <div class="col-sm-6 p-4">
-                <h1 class="text-md font-weight-bold">Example Receiver</h1>
-                <h2 class="text-normal">Peer ID: <span class="font-weight-bold" id="peer-id"></span></h2>
-                <h2 class="text-normal word-break-all mb-4">Peer URL: <span class="font-weight-bold" id="peer-url"></span></h2>
+                <h1 class="text-md font-weight-bold">Receive Log (For 2)</h1>
+                <p class="text-normal">If you want to read the log at your device</p>
+                <h2 class="text-normal d-none">My Peer ID: <span class="font-weight-bold" id="peer-id"></span></h2>
+                <h2 class="text-normal word-break-all mb-4">Device URL: <span class="font-weight-bold" id="peer-url">no device connected yet</span></h2>
                 <div id="l2m-received-container" style="padding:10px; border: 1px solid #DDD;">
                     <h5 class="text-sm m-auto text-center py-2">Log will be displayed here</h5>
                 </div>

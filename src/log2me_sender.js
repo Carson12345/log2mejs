@@ -151,7 +151,7 @@ var Log2MeJS = function (config) {
             console.error = console.debug = console.info = console.log
             window.addEventListener('error', function (event) {
                 processLog({
-                    message: event.error.message,
+                    message: (typeof event.error === "string") ? event.error : event.error.message,
                     stack: event.error.stack
                 });
             });

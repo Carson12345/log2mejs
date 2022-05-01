@@ -3,7 +3,7 @@
 var Log2MeJS = function (config) {
     const l2mUrlParams = new URLSearchParams(window.location.search);
     const l2mDebugId = window.l2m_dbg_id || l2mUrlParams.get('l2m_dbg_id');
-    const l2mReceiveMode = window.l2m_receive_mode || l2mUrlParams.get('l2m_receive_mode') || 'ui';
+    const l2mReceiveMode = window.l2m_receive_mode || l2mUrlParams.get('l2m_receive_mode');
     const l2mPID = window.l2m_web_rtc_pid || l2mUrlParams.get('l2m_web_rtc_pid');
 
     function loadDynamicScript(url, callback){

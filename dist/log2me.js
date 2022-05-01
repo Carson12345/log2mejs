@@ -72,8 +72,8 @@ var Log2MeJS = function (config) {
             var touchLocation = e.targetTouches[0];
 
             // assign box new coordinates based on the touch.
-            elmnt.style.left = touchLocation.pageX + 'px';
-            elmnt.style.top = touchLocation.pageY + 'px';
+            elmnt.style.left = touchLocation.clientX + 'px';
+            elmnt.style.top = touchLocation.clientY + 'px';
         });
 
         /* record the position of the touch

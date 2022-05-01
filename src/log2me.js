@@ -130,12 +130,14 @@ var Log2MeJS = function (config) {
             }
 
             // ui init
-            const logUIHtml = '<div id="l2m-log-container" style="max-height: 450px; position: fixed; z-index: 99999; bottom: 0px; left: 0px; width: 90%;"><div id="l2m-log-container-header" style="background-color: rgba(222,225,225,0.8); padding: 10px; border-bottom: 1px solid #DDD; font-size: 16px; cursor: pointer;">Console Log & Error (Drag to move me)</div><div id="l2m-log-container-body" style="max-height: 400px; overflow: scroll; background-color: rgba(240,240,240,0.8);"></div></div>';
-            const con = document.createElement('div');
-            con.innerHTML = logUIHtml;
-            document.body.append(con);
-
-            dragElement(document.getElementById("l2m-log-container"));
+            if (l2mReceiveMode === 'ui') {
+                const logUIHtml = '<div id="l2m-log-container" style="max-height: 450px; position: fixed; z-index: 99999; bottom: 0px; left: 0px; width: 90%;"><div id="l2m-log-container-header" style="background-color: rgba(222,225,225,0.8); padding: 10px; border-bottom: 1px solid #DDD; font-size: 16px; cursor: pointer;">Console Log & Error (Drag to move me)</div><div id="l2m-log-container-body" style="max-height: 400px; overflow: scroll; background-color: rgba(240,240,240,0.8);"></div></div>';
+                const con = document.createElement('div');
+                con.innerHTML = logUIHtml;
+                document.body.append(con);
+    
+                dragElement(document.getElementById("l2m-log-container"));
+            }
 
             // function init
             const old = console.log;

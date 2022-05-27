@@ -156,6 +156,19 @@ var Log2MeJS = function (config) {
                     stack: event.error.stack
                 });
             });
+            window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
+                let stack = '';
+                try {
+                    stack = 'Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
+                    + ' Column: ' + column + ' StackTrace: ' +  errorObj;
+                } catch (stackE) {
+                    console.log(stackE);
+                }
+                processLog({
+                    message: errorMsg,
+                    stack
+                });
+            };
             console.log("Log2Me Instance Connected");
         }
     }

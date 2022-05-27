@@ -90,11 +90,18 @@ var Log2MeJS = function (config) {
         const dS = new Date().toISOString();
         console._original_console_log_func('triggered');
         const logger = document.getElementById('l2m-log-container-body');
-        const wrapMsg = function (m) {
-            return '<div style="padding: 10px; font-family: courier; font-size: 12px; display: flex;">' + '<span style="width: 15%;word-break: break-all; padding: 6px; border-right: 1px solid #DDD;">' + dS + '</span>' + '<span style="padding: 6px; width: 85%;word-break: break-all;">' + m + '</span>' + '</div>';
-        };
-        logger.innerHTML += wrapMsg(message);
-        console._original_console_log_func(message);
+        if (logger) {
+            const wrapMsg = function (m) {
+                return '<div style="padding: 10px; font-family: courier; font-size: 12px; display: flex;">' + '<span style="width: 15%;word-break: break-all; padding: 6px; border-right: 1px solid #DDD;">' + dS + '</span>' + '<span style="padding: 6px; width: 85%;word-break: break-all;">' + m + '</span>' + '</div>';
+            };
+            logger.innerHTML += wrapMsg(message);
+            console._original_console_log_func(message);
+        } else {
+            window.l2mEarlyLogs.push({
+                message,
+                stack: 'UI Mode'
+            });
+        }
     };
 
     return {
@@ -110,66 +117,84 @@ var Log2MeJS = function (config) {
                 callback();
             });
         },
-        init: function (initConfig) {
+        init: function (initConfig = {}) {
             let processLog = function(message) {
                 let raw = typeof message == 'object' ? message : {
                     message,
                     stack: ""
                 };
-                if (l2mReceiveMode === 'ui') {
-                    log2UI(raw.message);
-                }
-                if (l2mReceiveMode === 'web_rtc') {
-                    // Receive messages
-                    initConfig.rtcConn.on('data', function(data) {
-                        console.log('L2M_RTC_RECEIVED:', data);
-                    });
-                    // Send messages
-                    initConfig.rtcConn.send({
-                        url: window.location.href,
-                        date: new Date().toISOString(),
-                        ... raw,
-                        debugId: l2mDebugId
-                    });
-                    // log2UI(raw.message);
+                let m = {
+                    url: window.location.href,
+                    date: new Date().toISOString(),
+                    ... raw,
+                    debugId: l2mDebugId
+                };
+
+                if (window.l2mSenderFunc) {
+                    window.l2mSenderFunc(m);
+                } else {
+                    window.l2mEarlyLogs.push(m);
                 }
             };
 
             // ui init
-            if (l2mReceiveMode === 'ui') {
-                const logUIHtml = '<div id="l2m-log-container" style="max-height: 450px; position: fixed; z-index: 99999; bottom: 0px; left: 0px; width: 90%;"><div id="l2m-log-container-header" style="background-color: rgba(222,225,225,0.8); padding: 10px; border-bottom: 1px solid #DDD; font-size: 16px; cursor: pointer;">Console Log & Error (Drag to move me)</div><div id="l2m-log-container-body" style="max-height: 400px; overflow: scroll; background-color: rgba(240,240,240,0.8); overflow: scroll; max-height: 800px;"></div></div>';
-                const con = document.createElement('div');
-                con.innerHTML = logUIHtml;
-                document.body.append(con);
-    
-                dragElement(document.getElementById("l2m-log-container"));
+            if (initConfig.domReady) {
+                if (l2mReceiveMode === 'ui') {
+                    const logUIHtml = '<div id="l2m-log-container" style="max-height: 450px; position: fixed; z-index: 99999; bottom: 0px; left: 0px; width: 90%;"><div id="l2m-log-container-header" style="background-color: rgba(222,225,225,0.8); padding: 10px; border-bottom: 1px solid #DDD; font-size: 16px; cursor: pointer;">Console Log & Error (Drag to move me)</div><div id="l2m-log-container-body" style="max-height: 400px; overflow: scroll; background-color: rgba(240,240,240,0.8); overflow: scroll; max-height: 800px;"></div></div>';
+                    const con = document.createElement('div');
+                    con.innerHTML = logUIHtml;
+                    document.body.append(con);
+        
+                    dragElement(document.getElementById("l2m-log-container"));
+                }
+
+                window.l2mSenderFunc = function(m) {
+                    if (l2mReceiveMode === 'ui') {
+                        log2UI(m.message);
+                    }
+                    if (l2mReceiveMode === 'web_rtc') {
+                        if (!initConfig.rtcConn) {
+                            window.l2mEarlyLogs.push(m);
+                        } else {
+                            // Receive messages
+                            initConfig.rtcConn.on('data', function(data) {
+                                console.log('L2M_RTC_RECEIVED:', data);
+                            });
+                            // Send messages
+                            console._original_console_log_func(m);
+                            initConfig.rtcConn.send(m);
+                            // log2UI(raw.message);
+                        }
+                    }
+                };
+
+                if (window.l2mEarlyLogs && window.l2mEarlyLogs.length > 0) {
+                    window.l2mEarlyLogs.forEach( m => {
+                        processLog(m);
+                    });
+                }
             }
 
             // function init
-            const old = console.log;
-            console._original_console_log_func = old;
-            console.log = processLog;
-            console.error = console.debug = console.info = console.log;
-            window.addEventListener('error', function (event) {
-                processLog({
-                    message: (typeof event.error === "string") ? event.error : event.error.message,
-                    stack: event.error.stack
+            if (!window.l2mFunctionsSetup && !initConfig.domReady) {
+                const old = console.log;
+                console._original_console_log_func = old;
+                console.log = processLog;
+                console.error = console.debug = console.info = console.log;
+                window.addEventListener('error', function (event) {
+                    processLog({
+                        message: (typeof event.error === "string") ? event.error : event.error.message,
+                        stack: event.error.stack
+                    });
                 });
-            });
-            window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
-                let stack = '';
-                try {
-                    stack = 'Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
-                    + ' Column: ' + column + ' StackTrace: ' +  errorObj;
-                } catch (stackE) {
-                    console.log(stackE);
-                }
-                processLog({
-                    message: errorMsg,
-                    stack
-                });
-            };
-            console.log("Log2Me Instance Connected");
+                window.l2mFunctionsSetup = true;
+            }
+            
+            if (!window.l2mFunctionsSetup) {
+                console.log("Log2Me Instance First Inited");
+            } else {
+                console.log("Log2Me Instance Inited Again");
+            }
         }
     }
 };
